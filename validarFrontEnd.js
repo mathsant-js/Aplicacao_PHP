@@ -1,23 +1,32 @@
-function validarFormulario() {
-        var nome = document.getElementById("nome").value;
-            var cpf = document.getElementById("cpf").value;
-            var telefone = document.getElementById("telefone").value;
-            var dataNascimento = document.getElementById("data_nascimento").value;
-            var senha = document.getElementById("senha").value;
+const retornaValorDoElemento = (elemento) =>
+  document.getElementById(`${elemento}`).value;
 
-            // Verifica se todos os campos foram preenchidos
-            if (nome === "" || cpf === "" || telefone === "" || dataNascimento === "" || senha === "") {
-                alert("Por favor, preencha todos os campos.");
-                return false;
-            }
+const verificaCamposVazios = (fields) => ("" in [...fields]);
 
-            // Verifica o formato do CPF (apenas números)
-            if (!/^\d{3}\.\d{3}\.\d{3}-\d{2}$/.test(cpf)) {
-                alert("CPF inválido!");
-                return false;
-            }
+const verificaCPFInvalido = (cpf) => ! (/^\d{3}\.\d{3}\.\d{3}-\d{2}$/.test(cpf));
 
-            // Outras validações podem ser adicionadas aqui
+const retornaMensagemErro = (primeiroTeste, segundoTeste) => {
+  if(primeiroTeste)
+    return "Por favor, preencha todos os campos!";
+  if(segundoTeste)
+    return "CPF inválido!"
 
-            return true; // Retorna true se todas as validações passaram
-        }
+}
+
+const validarFormulario = () => {
+  const erro = retornaMensagemErro(
+    verificaCamposVazios([
+      retornaValorDoElemento("nome"),
+      retornaValorDoElemento("cpf"),
+      retornaValorDoElemento("telefone"),
+      retornaValorDoElemento("dataNascimento"),
+      retornaValorDoElemento("senha"),
+    ]),
+    verificaCPFInvalido(cpf)
+  );
+
+  if(erro) {
+    alert(erro);
+    event.preventDefault();
+  }
+};
